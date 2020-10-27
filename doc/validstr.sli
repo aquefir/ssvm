@@ -1,0 +1,15 @@
+validstr/valid_ascii.sub
+	Validates a string of characters as ASCII encoded. Note that NUL bytes are
+	valid in ASCII encoding, so this function will count those for as long as
+	the length parameter $2 allows for it.
+validstr/valid_ascii.sub:$1
+	A pointer to a const array of chars to validate as ASCII.
+validstr/valid_ascii.sub:$1*
+	Must be a valid pointer to an array of chars, or some other memory that
+	is valid to interpret as such. The memory region pointed to must be at
+	least as large in bytes as the value given in $2.
+validstr/valid_ascii.sub:$2
+	The length of $1, in bytes.
+validstr/valid_ascii.sub:#
+	Returns zero (falsey) if the string is invalid, or nonzero (truthy) if the
+	string is valid.
