@@ -1,4 +1,5 @@
 validstr/valid_ascii.sub
+	[pure]
 	Validates a string of characters as ASCII encoded. Note that NUL bytes are
 	valid in ASCII encoding, so this function will count those for as long as
 	the length parameter $2 allows for it.
