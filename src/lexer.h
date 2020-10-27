@@ -43,12 +43,16 @@ enum
 	K_SWITCH,
 	K_CASE,
 	K_RETURN,
+	K_TYPEOF,
+	K_SIZEOF,
 	K_LBRACE,
 	K_RBRACE,
 	K_LPAREN,
 	K_RPAREN,
 	K_LBRACK,
 	K_RBRACK,
+	K_DOTDOTDOT,
+	K_DOT,
 	K_PLUSSET,
 	K_MINUSSET,
 	K_STARSTARSET,
@@ -77,8 +81,6 @@ enum
 	K_PLUS,
 	K_MINUS,
 	K_BITNOT,
-	K_TYPEOF,
-	K_SIZEOF,
 	K_STARSTAR,
 	K_STAR,
 	K_SLASH,
@@ -97,8 +99,9 @@ enum
 
 struct tok_strlit
 {
-	/* this be a NUL-terminated string that is valid ASCII */
+	/* this be a string that is valid ASCII */
 	char* str;
+	ptri str_sz;
 };
 
 struct tok_num
@@ -108,13 +111,19 @@ struct tok_num
 	{
 		f32 f;
 		s32 i;
-	}
-	num;
+	};
 };
 
 struct tok_keyword
 {
 	keyword_t keyword;
+};
+
+struct tok_ident
+{
+	/* this be a string that is valid ASCII */
+	char* str;
+	ptri str_sz;
 };
 
 struct tok
@@ -125,8 +134,8 @@ struct tok
 		struct tok_strlit strlit;
 		struct tok_num num;
 		struct tok_keyword keyword;
-	}
-	data;
+		struct tok_ident ident;
+	};
 };
 
 struct tok* lex( const char* );

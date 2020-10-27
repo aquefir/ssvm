@@ -34,16 +34,20 @@ FWORKS :=
 3PLIBS   :=
 
 # sources
-CFILES   :=
-HFILES   :=
-CPPFILES :=
-HPPFILES :=
+CFILES    := \
+	src/lexer.c \
+	src/validstr.c
+CPPFILES  :=
+PUBHFILES :=
+PRVHFILES := \
+	src/lexer.h \
+	src/validstr.h
 
 # test suite sources
-TES_CFILES   :=
-TES_HFILES   :=
-TES_CPPFILES :=
-TES_HPPFILES :=
+TES_CFILES    :=
+TES_CPPFILES  :=
+TES_PUBHFILES :=
+TES_PRVHFILES :=
 
 # force C++ linker because of 3rd-party library
 CCLD := $(CXX)
