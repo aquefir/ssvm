@@ -8,8 +8,14 @@
 #ifndef INC__SSVM_LEXER_H
 #define INC__SSVM_LEXER_H
 
+#include <stdlib.h>
+#include <uni/err.h>
+#include <uni/memory.h>
+#include <uni/str.h>
 #include <uni/types/float.h>
 #include <uni/types/int.h>
+
+#include "validstr.h"
 
 typedef u8 tokid_t;
 typedef u8 keyword_t;

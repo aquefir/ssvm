@@ -12,7 +12,7 @@
 int valid_ascii( const char * str, ptri str_sz )
 {
 	ptri i;
-	const u8 * bytes = str;
+	const u8 * bytes = (const u8 *)str;
 
 	for( i = 0; i < str_sz; ++i )
 	{

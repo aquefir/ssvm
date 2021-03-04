@@ -7,10 +7,6 @@
 
 #include "lexer.h"
 
-#include <uni/err.h>
-#include <uni/memory.h>
-#include <uni/str.h>
-
 static const char * const keywords[MAX_K] = {"let",
 	"const",
 	"if",
@@ -91,7 +87,6 @@ static const ptri keywords_sz[MAX_K] = {3,
 	6,
 	3,
 	2,
-	1,
 	1,
 	1,
 	1,
