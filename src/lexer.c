@@ -11,7 +11,7 @@
 #include <uni/memory.h>
 #include <uni/str.h>
 
-static const char* keywords[MAX_K] = {
+static const char* const keywords[MAX_K] = {
 	"let",
 	"const",
 	"if",
