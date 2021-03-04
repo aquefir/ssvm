@@ -24,8 +24,8 @@ enum
 	T_KEYWORD,
 	/* Strings of text not otherwise reserved */
 	T_IDENT,
-	/* this bounds the token types and also signifies the end of an array of
-	 * type ‘struct tok *’ */
+	/* this bounds the token types and also signifies the end of an array
+	 * of type ‘struct tok *’ */
 	MAX_T
 };
 
@@ -100,7 +100,7 @@ enum
 struct tok_strlit
 {
 	/* this be a string that is valid ASCII */
-	char* str;
+	char * str;
 	ptri str_sz;
 };
 
@@ -122,7 +122,7 @@ struct tok_keyword
 struct tok_ident
 {
 	/* this be a string that is valid ASCII */
-	char* str;
+	char * str;
 	ptri str_sz;
 };
 
@@ -138,6 +138,6 @@ struct tok
 	};
 };
 
-struct tok* lex( const char* );
+struct tok * lex( const char * );
 
 #endif /* INC__SSVM_LEXER_H */
