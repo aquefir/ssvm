@@ -11,7 +11,7 @@ PROJECT := ssvm
 
 # put a ‘1’ for the desired target types to compile
 EXEFILE :=
-SOFILE  := 1
+SOFILE  :=
 AFILE   := 1
 
 # space-separated path list for #includes
@@ -48,9 +48,6 @@ TES_CFILES    :=
 TES_CPPFILES  :=
 TES_PUBHFILES :=
 TES_PRVHFILES :=
-
-# force C++ linker because of 3rd-party library
-CCLD := $(CXX)
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk
