@@ -135,13 +135,38 @@ static const ptri keywords_sz[MAX_K] = {3,
 	1,
 	1};
 
+const char * get_keyword( ptri i )
+{
+	if( i > MAX_K )
+	{
+		i = MAX_K;
+	}
+
+	return keywords[i];
+}
+
+static int nz_strequ( unsigned index, const char * b )
+{
+	unsigned i;
+
+	for( i = 0; i < keywords_sz[index]; ++i )
+	{
+		if( b[i] == '\0' || keywords[index][i] != b[i] )
+		{
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
 static ptri scan_keyword( const char * in )
 {
 	unsigned i;
 
 	for( i = 0; i < MAX_K; ++i )
 	{
-		if( uni_strequ( keywords[i], in ) )
+		if( nz_strequ( i, in ) )
 		{
 			return keywords_sz[i];
 		}
@@ -176,20 +201,23 @@ static ptri scan_ident( const char * in )
 static ptri scan_strlit( const char * in )
 {
 	unsigned i = 0;
+	char mark = '\0';
 
-	if( in[i] != '"' )
+	if( in[i] != '"' && in[i] != '\'' )
 	{
 		return 0;
 	}
 
+	mark = in[i];
+
 	i++;
 
-	while( in[i] != '"' || ( i > 0 && in[i] == '"' && in[i - 1] == '\\' ) )
+	while( in[i] != mark || ( i > 0 && in[i] == mark && in[i - 1] == '\\' ) )
 	{
 		i++;
 	}
 
-	if( in[i] == '"' )
+	if( in[i] == mark )
 	{
 		return i + 1;
 	}
@@ -212,7 +240,7 @@ static ptri scan_num( const char * in )
 
 	if( in[i] == '0' )
 	{
-		switch( in[i] )
+		switch( in[i + 1] )
 		{
 		case 'x':
 		case 'X':
@@ -233,7 +261,7 @@ static ptri scan_num( const char * in )
 			break;
 		}
 
-		i += 2;
+		i += numtyp == NUM_DEC ? 1 : 2;
 	}
 	else
 	{
@@ -285,10 +313,14 @@ static const PFN_scan scanners[MAX_T] = {
 static int mapkeyword( const char * in, ptri in_sz )
 {
 	int i;
+	char str[in_sz + 1];
+
+	uni_memcpy( str, in, in_sz );
+	str[in_sz] = '\0';
 
 	for( i = 0; i < MAX_K; ++i )
 	{
-		if( uni_strequ( in, keywords[i] ) )
+		if( uni_strequ( str, keywords[i] ) )
 		{
 			return i;
 		}
@@ -300,9 +332,10 @@ static int mapkeyword( const char * in, ptri in_sz )
 static s32 strtos32( const char * in, ptri in_sz )
 {
 	long ret;
+	char str[in_sz + 1];
 
-	char * str = uni_alloc( sizeof( char ) * ( in_sz + 1 ) );
 	uni_memcpy( str, in, in_sz );
+	str[in_sz] = '\0';
 
 	if( in_sz >= 3 && str[0] == '0' )
 	{
@@ -332,9 +365,7 @@ static s32 strtos32( const char * in, ptri in_sz )
 		ret = strtol( str, NULL, 10 );
 	}
 
-	uni_free( str );
-
-	return ret >= S32_MAX ? S32_MAX : (s32)ret;
+	return ret >= S32_MAX ? S32_MAX : ret <= S32_MIN ? S32_MIN : (s32)ret;
 }
 
 #define LEX_ASSERT( _cnd, _msg ) \
@@ -399,11 +430,12 @@ struct tok * lex( const char * in )
 						(const char *)( str + i ),
 						len );
 					curtok.num.i = num;
+					curtok.num.is_int = 1;
 				}
 				else if( j == T_STRLIT )
 				{
 					LEX_ASSERT(
-						valid_ascii(
+						!chk_ascii(
 							(const char *)( str +
 								i ),
 							len ),
@@ -428,7 +460,7 @@ struct tok * lex( const char * in )
 				else if( j == T_IDENT )
 				{
 					LEX_ASSERT(
-						valid_ascii(
+						!chk_ascii(
 							(const char *)( str +
 								i ),
 							len ),

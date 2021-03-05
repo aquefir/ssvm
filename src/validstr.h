@@ -10,6 +10,6 @@
 
 #include <uni/types/int.h>
 
-int valid_ascii( const char *, ptri );
+int chk_ascii( const char *, ptri );
 
 #endif /* INC__SSVM_VALIDSTR_H */

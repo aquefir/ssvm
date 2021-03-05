@@ -144,6 +144,7 @@ struct tok
 	};
 };
 
+const char * get_keyword( ptri );
 struct tok * lex( const char * );
 
 #endif /* INC__SSVM_LEXER_H */

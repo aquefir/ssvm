@@ -4,6 +4,9 @@
 /3rdparty/*
 !/3rdparty/README
 
+*.tes
+*.profraw
+*.profdata
 *.o
 *.obj
 *.gcno

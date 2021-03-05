@@ -9,14 +9,13 @@
 
 #include <uni/types/int.h>
 
-int valid_ascii( const char * str, ptri str_sz )
+int chk_ascii( const char * str, ptri str_sz )
 {
 	ptri i;
-	const u8 * bytes = (const u8 *)str;
 
 	for( i = 0; i < str_sz; ++i )
 	{
-		if( bytes[i] > 0x7F )
+		if( (u8)(str[i]) > 0x7F )
 		{
 			/* NOTE: the public API allows us to return anything
 			 * besides 0 */
