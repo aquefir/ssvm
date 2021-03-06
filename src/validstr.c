@@ -15,7 +15,7 @@ int chk_ascii( const char * str, ptri str_sz )
 
 	for( i = 0; i < str_sz; ++i )
 	{
-		if( (u8)(str[i]) > 0x7F )
+		if( ( u8 )( str[i] ) > 0x7F )
 		{
 			/* NOTE: the public API allows us to return anything
 			 * besides 0 */

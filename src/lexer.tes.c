@@ -35,7 +35,7 @@ static void print_ident( struct tok_ident id )
 TES_OPEN( );
 
 const char * script =
-	"const foo = 'Haha'\nconst fun = () => {\n\treturn 0\n}\n";
+	"const foo = 'Ha\\'ha!'\nconst fun = () => {\n\treturn 0\n}\n";
 struct tok * ret;
 ptri i;
 

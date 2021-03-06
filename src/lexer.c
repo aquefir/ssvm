@@ -7,7 +7,7 @@
 
 #include "lexer.h"
 
-static const char * const keywords[MAX_K] = {"let",
+static const char * const keywords[MAX_K] = { "let",
 	"const",
 	"if",
 	"else",
@@ -69,9 +69,9 @@ static const char * const keywords[MAX_K] = {"let",
 	"|",
 	"^",
 	"?",
-	":"};
+	":" };
 
-static const ptri keywords_sz[MAX_K] = {3,
+static const ptri keywords_sz[MAX_K] = { 3,
 	5,
 	2,
 	4,
@@ -133,7 +133,7 @@ static const ptri keywords_sz[MAX_K] = {3,
 	1,
 	1,
 	1,
-	1};
+	1 };
 
 const char * get_keyword( ptri i )
 {
@@ -201,7 +201,7 @@ static ptri scan_ident( const char * in )
 static ptri scan_strlit( const char * in )
 {
 	unsigned i = 0;
-	char mark = '\0';
+	char mark  = '\0';
 
 	if( in[i] != '"' && in[i] != '\'' )
 	{
@@ -212,7 +212,8 @@ static ptri scan_strlit( const char * in )
 
 	i++;
 
-	while( in[i] != mark || ( i > 0 && in[i] == mark && in[i - 1] == '\\' ) )
+	while( in[i] != mark ||
+		( i > 0 && in[i] == mark && in[i - 1] == '\\' ) )
 	{
 		i++;
 	}
@@ -286,9 +287,9 @@ static ptri scan_label( const char * in ) { return in[0] == ':' ? 1 : 0; }
 
 static ptri scan_newln( const char * in )
 {
-	return ( in[0] == '\r' && in[1] == '\n' )
-		? 2
-		: ( in[0] == '\r' || in[0] == '\n' ) ? 1 : 0;
+	return ( in[0] == '\r' && in[1] == '\n' )    ? 2
+		: ( in[0] == '\r' || in[0] == '\n' ) ? 1
+						     : 0;
 }
 
 /* this is called directly by lex(), unlike other scanners */
@@ -308,7 +309,7 @@ static ptri scan_wspc( const char * in )
 typedef ptri ( *PFN_scan )( const char * );
 
 static const PFN_scan scanners[MAX_T] = {
-	scan_strlit, scan_num, scan_keyword, scan_ident};
+	scan_strlit, scan_num, scan_keyword, scan_ident };
 
 static int mapkeyword( const char * in, ptri in_sz )
 {
@@ -429,7 +430,7 @@ struct tok * lex( const char * in )
 					s32 num = strtos32(
 						(const char *)( str + i ),
 						len );
-					curtok.num.i = num;
+					curtok.num.i      = num;
 					curtok.num.is_int = 1;
 				}
 				else if( j == T_STRLIT )
@@ -437,16 +438,17 @@ struct tok * lex( const char * in )
 					LEX_ASSERT(
 						!chk_ascii(
 							(const char *)( str +
-								i ),
-							len ),
+								1 + i ),
+							len - 1 ),
 						"String has invalid (non-ASCII) characters" );
-					curtok.strlit.str_sz = len + 1;
-					curtok.strlit.str    = uni_alloc(
-                                                curtok.strlit.str_sz );
+					curtok.strlit.str_sz =
+						len - 1; /* - 1 for quotes */
+					curtok.strlit.str = uni_alloc(
+						curtok.strlit.str_sz );
 					uni_memcpy( curtok.strlit.str,
-						(u8 *)str + i,
-						len );
-					curtok.strlit.str[len] = '\0';
+						(u8 *)str + i + 1,
+						len - 1 );
+					curtok.strlit.str[len - 2] = '\0';
 				}
 				else if( j == T_KEYWORD )
 				{
