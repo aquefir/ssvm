@@ -59,6 +59,9 @@ for(i = 0; ret[i].type != MAX_T; ++i)
 	case T_IDENT:
 		print_ident( ret[i].ident );
 		break;
+	case T_NEWLINE:
+		uni_print( "[NEWLINE]" );
+		break;
 	default:
 		break;
 	}

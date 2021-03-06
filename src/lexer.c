@@ -293,23 +293,50 @@ static ptri scan_newln( const char * in )
 }
 
 /* this is called directly by lex(), unlike other scanners */
-static ptri scan_wspc( const char * in )
+static ptri scan_wspc( const char * in, int * n )
 {
-	unsigned i = 0, j = 0;
+	unsigned i = 0;
+	int n2     = -1;
 
-	while( ( j = in[i] == ' ' ) || ( j = in[i] == '\t' ) ||
-		( j = scan_newln( &( in[i] ) ) ) )
+	for( ;; )
 	{
-		i += j;
+		if( in[i] == ' ' || in[i] == '\t' )
+		{
+			i++;
+		}
+		else
+		{
+			const unsigned j = scan_newln( &( in[i] ) );
+
+			if( !j )
+			{
+				break;
+			}
+
+			if( n2 == -1 )
+			{
+				n2 = j > 0 ? 1 : 0;
+			}
+
+			i += j;
+		}
 	}
 
+	*n = n2 >= 0 ? n2 : 0;
+
 	return i;
+}
+
+static ptri scan_ret0( const char * in )
+{
+	(void)in;
+	return 0;
 }
 
 typedef ptri ( *PFN_scan )( const char * );
 
 static const PFN_scan scanners[MAX_T] = {
-	scan_strlit, scan_num, scan_keyword, scan_ident };
+	scan_strlit, scan_num, scan_keyword, scan_ident, scan_ret0 };
 
 static int mapkeyword( const char * in, ptri in_sz )
 {
@@ -401,6 +428,7 @@ struct tok * lex( const char * in )
 	for( i = 0; i < in_sz; ++i )
 	{
 		ptri j;
+		int n = 0;
 
 		if( ret_sz >= ret_cap )
 		{
@@ -410,7 +438,24 @@ struct tok * lex( const char * in )
 		}
 
 		/* scan ahead for any whitespace first */
-		i += scan_wspc( (const char *)( str + i ) );
+		i += scan_wspc( (const char *)( str + i ), &n );
+
+		if( n )
+		{
+			/* there was a newline. that’s the token */
+			struct tok curtok;
+
+			curtok.type = T_NEWLINE;
+
+			uni_memcpy( &( ret[ret_sz] ),
+				&curtok,
+				sizeof( struct tok ) );
+			ret_sz++;
+
+			i--;
+
+			continue;
+		}
 
 		for( j = 0; j < MAX_T; ++j )
 		{

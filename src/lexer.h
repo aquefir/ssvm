@@ -30,6 +30,7 @@ enum
 	T_KEYWORD,
 	/* Strings of text not otherwise reserved */
 	T_IDENT,
+	T_NEWLINE,
 	/* this bounds the token types and also signifies the end of an array
 	 * of type ‘struct tok *’ */
 	MAX_T
